@@ -1,109 +1,113 @@
-// Javascript Document
+$(document).ready(function(){
+  if(localStorage.getItem("isLoggedIn") == "true"){
+    window.location.replace("dashboard1.html");
+  }
+})
 
-$('document').ready(function()
-{
-	$("regForm").validate({
-		rules:
-		{
-			fullname: {
-				required: true,
-			},
-			business_name: {
-				required: true,
-			},
-			bus_type: {
-				required: true,
-			},
-			user_name: {
-				required: true,
-				minlength: 3
-			},
-			password: {
-				required: true,
-				minlength: 8,
-				maxlength: 15
-			},
-			password_c: {
-				required: true,
-				equalTo: '#password'
-			},
-			website: {
-				required: true,
-				url: true
-			},
+$(function() {
 
-		},
-		messages:
-		{
-			user_name: "Please enter user name",
-			password: {
-				required: "Please provide a password"
-				minlength: "Password at least 8 characters"
-			},
-			password_c: {
-				required: "Please provid a password"
-				equalTo: "Password does not match!"
-			}
-			website: {
-				url: "Please enter proper URL"
-			}
-		},
-		submitHandler: submitForm
-
-
-		})
+    $('#login-form-link').click(function(e) {
+		$("#login-form").delay(100).fadeIn(100);
+ 		$("#register-form").fadeOut(100);
+		$('#register-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
+	});
+	$('#register-form-link').click(function(e) {
+		$("#register-form").delay(100).fadeIn(100);
+ 		$("#login-form").fadeOut(100);
+		$('#login-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
 	});
 
-	$("signin").validate({
-			rules:
-			{
-				user_name: {
-					required: true,
-				},
-				password: {
-					required: true,
-				}
-			}
+	$('#login-form').validate({
+		submitHandler: function (form) {
+        	var username = $('#loginusername').val();
+        	var password = $('#loginpassword').val();
+        	var data = {
+        		username: username, 
+        		password: password
+        	};
+        	var dataStr = JSON.stringify(data);
+            $.ajax({
+                 type: "GET",
+                 url: "http://ec2-54-84-109-19.compute-1.amazonaws.com:5000/signin.json?data="+dataStr,
+                 success: function (data) {
+                 	localStorage.setItem("username", username);
+                 	localStorage.setItem("isLoggedIn", "true");
+                 	window.location.href = "dashboard1.html";
+                 },
+                 error: function(error) {
+                 	console.log("response: "+error);
+                 	$("#message").removeClass("alert-info");
+                    $("#message").removeClass("alert-success");
+                    $("#message").addClass("alert-danger");
+                    $("#message_text").text("login error: "+error);
+                 }
+            });
+            return false;
+        }
 	});
 
-	$('#login').submit(function(login))
+	$('#register-form').validate({
+		rules: {
+           	password: { 
+             	required: true,
+                minlength: 6,
+                maxlength: 10,
 
-	function submitForm()
-	{
-		var data = $("#regForm").seralize();
-
-		$.ajax({
-
-			type:'POST',
-			url: '',
-			data: data,
-			success: function(){
-				return Registration Completed;
-			}
-		});
-	}
-
-	function login()
-	{
-		$.ajax({
-			type: "POST",
-			url: '',
-			data: {
-				user_name: $("#user_name").val(),
-				password: $("#password").val()
-			},
-			success: function(data)
-			{
-				if (data === 'Correct')
-				{
-					window.location.replace();
-				}
-				else
-				{
-					$("#error").html("<span style='color:#cc0000'>Error:</span> Invalid username and password. ");
-				}
-			}
-		})
-	}
+           	}, 
+            confirmpassword: { 
+                equalTo: "#password",
+                minlength: 6,
+                maxlength: 10
+           	},
+           	website: {
+           		required: false,
+           		url: true
+           	}
+        },
+        submitHandler: function (form) {
+        	var full_name = $('#fullname').val();
+        	var business_name = $('#businessname').val();
+        	var business_type = $('#businesstype').val();
+        	var username = $('#username').val();
+        	var create_password = $('#password').val();
+        	var confirm_password = $('#confirmpassword').val();
+        	var website_url = "";
+        	if($('#website').val())
+        		website_url = $('#website').val();
+        	var data = {
+        		full_name: full_name, 
+        		business_name: business_name, 
+        		business_type: business_type, 
+        		username: username, 
+        		create_password: create_password,
+        		confirm_password: confirm_password,
+        		website_url: website_url
+        	};
+        	var dataStr = JSON.stringify(data);
+            $.ajax({
+                 type: "GET",
+                 url: "http://ec2-54-84-109-19.compute-1.amazonaws.com:5000/signup.json?data="+dataStr,
+                 success: function (data) {
+                 	console.log("response: "+data);
+                    $("#message").removeClass("alert-info");
+                    $("#message").removeClass("alert-danger");
+                    $("#message").addClass("alert-success");
+                    $("#message_text").text("Registration successful! Please login to continue.");
+                 },
+                 error: function(error) {
+                 	console.log("response: "+error);
+                 	$("#message").removeClass("alert-info");
+                    $("#message").removeClass("alert-success");
+                    $("#message").addClass("alert-danger");
+                    $("#message_text").text("Registration error: "+error);
+                 }
+            });
+            return false;
+        }
+	});
 
 });
