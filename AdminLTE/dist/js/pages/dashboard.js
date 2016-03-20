@@ -17,6 +17,19 @@ $(function () {
     forcePlaceholderSize: true,
     zIndex: 999999
   });
+
+  $('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+  });
+
   $(".connectedSortable .box-header, .connectedSortable .nav-tabs-custom").css("cursor", "move");
 
   //jQuery UI sortable for the todo list
@@ -77,10 +90,10 @@ $(function () {
     },
     series: {
       regions: [{
-          values: visitorsData,
-          scale: ["#92c1dc", "#ebf4f9"],
-          normalizeFunction: 'polynomial'
-        }]
+        values: visitorsData,
+        scale: ["#92c1dc", "#ebf4f9"],
+        normalizeFunction: 'polynomial'
+      }]
     },
     onRegionLabelShow: function (e, el, code) {
       if (typeof visitorsData[code] != "undefined")
