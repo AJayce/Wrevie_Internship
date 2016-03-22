@@ -30,6 +30,7 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
   <!--- datetimepicker -->
+  <link rel="stylesheet" href="bootstrap-datetimepicker.css">
  
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -492,7 +493,6 @@
    
       <div class="tab-content">
           <div id="tab1" class="tab active">
-              <p>Tab #1 DATETIMEPICKER</p>
               <div class="container">
                 <div class="row">
                     <div class='col-sm-6'>
@@ -510,7 +510,14 @@
           </div>
    
           <div id="tab2" class="tab">
-              <p>Tab #2 DATETIMEPICKER</p>
+              <div class="container">
+                <div class="row">
+                    <div class='col-sm-6'>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker2'>
+                                <input type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
           </div>
       </div>
   </div>
@@ -885,6 +892,7 @@
 <script src="dist/js/demo.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <!-- datetimepicker script -->
+<script src="bootstrap-datetimepicker.js"></script>
 
 
 </body>
