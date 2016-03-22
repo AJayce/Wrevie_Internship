@@ -221,6 +221,13 @@ $(function () {
   });
 
   $('#datetimepicker1').datetimepicker();  
+    inline:true,
+    sideBySide:true
 
+});
+
+  $('#datetimepicker2').datetimepicker();  
+    inline:true,
+    sideBySide:true
 
 });
